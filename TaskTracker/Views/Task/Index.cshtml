@@ -1,0 +1,60 @@
+﻿@model List<TaskTracker.Models.TaskItem>
+
+@{
+    ViewData["Title"] = "Task Tracker";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center text-primary mb-4">🚀 Task Tracker</h1>
+
+    <form asp-action="Add" method="post" class="d-flex mb-3">
+        <input type="text" name="title" class="form-control me-2" placeholder="Enter new task..." required />
+        <button type="submit" class="btn btn-success">Add Task</button>
+    </form>
+
+    <table class="table table-bordered table-striped shadow">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No tasks available</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var task in Model)
+                {
+                    <tr>
+                        <td>@task.Id</td>
+                        <td>@task.Title</td>
+                        <td>
+                            @if (task.IsCompleted)
+                            {
+                                <span class="badge bg-success">Completed</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!task.IsCompleted)
+                            {
+                                <a asp-action="Complete" asp-route-id="@task.Id" class="btn btn-sm btn-primary">Mark Done</a>
+                            }
+                            <a asp-action="Delete" asp-route-id="@task.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
